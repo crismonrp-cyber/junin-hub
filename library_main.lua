@@ -31,13 +31,12 @@ local Library = {
 
     HudRegistry = {};
 
-    FontColor = Color3.fromRGB(238, 238, 238);  
-    MainColor = Color3.fromRGB(13, 13, 13); 
-    BackgroundColor = Color3.fromRGB(8, 8, 8);
-    AccentColor = Color3.fromRGB(255, 0, 127);
-    OutlineColor = Color3.fromRGB(30, 30, 30);
-    RiskColor = Color3.fromRGB(255, 50, 80),
-    AccentColorDark = Color3.fromRGB(200, 0, 100),
+    FontColor = Color3.fromRGB(255, 255, 255);
+    MainColor = Color3.fromRGB(28, 28, 28);
+    BackgroundColor = Color3.fromRGB(20, 20, 20);
+    AccentColor = Color3.fromRGB(0, 85, 255);
+    OutlineColor = Color3.fromRGB(50, 50, 50);
+    RiskColor = Color3.fromRGB(255, 50, 50),
 
     Black = Color3.new(0, 0, 0);
     Font = Enum.Font.Code,
@@ -2970,37 +2969,8 @@ function Library:CreateWindow(...)
         Size = Config.Size,
         Visible = false;
         ZIndex = 1;
-        Parent = ScreenGui,
+        Parent = ScreenGui;
     });
-
-    -- Скругление углов
-    local OuterCorner = Instance.new("UICorner")
-    OuterCorner.CornerRadius = UDim.new(0, 12)
-    OuterCorner.Parent = Outer
-
-    -- Тень
-    local Shadow = Instance.new("ImageLabel")
-    Shadow.Image = "rbxassetid://6015897843"
-    Shadow.BackgroundTransparency = 1
-    Shadow.ScaleType = Enum.ScaleType.Slice
-    Shadow.SliceCenter = Rect.new(99, 99, 99, 99)
-    Shadow.Size = UDim2.new(1, 40, 1, 40)
-    Shadow.Position = UDim2.new(0, -20, 0, -20)
-    Shadow.ZIndex = 0
-    Shadow.ImageTransparency = 0.6
-    Shadow.ImageColor3 = Library.AccentColor
-    Shadow.Parent = Outer
-
-    -- Свечение
-    local Glow = Instance.new("ImageLabel")
-    Glow.Image = "rbxassetid://6817108073"
-    Glow.BackgroundTransparency = 1
-    Glow.Size = UDim2.new(1, 30, 1, 30)
-    Glow.Position = UDim2.new(0, -15, 0, -15)
-    Glow.ZIndex = 0
-    Glow.ImageTransparency = 0.7
-    Glow.ImageColor3 = Library.AccentColor
-    Glow.Parent = Outer
 
     Library:MakeDraggable(Outer, 25);
 
@@ -3011,13 +2981,8 @@ function Library:CreateWindow(...)
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
         ZIndex = 1;
-        Parent = Outer,
+        Parent = Outer;
     });
-
-    -- Скругление внутренней части
-    local InnerCorner = Instance.new("UICorner")
-    InnerCorner.CornerRadius = UDim.new(0, 10)
-    InnerCorner.Parent = Inner
 
     Library:AddToRegistry(Inner, {
         BackgroundColor3 = 'MainColor';
@@ -3029,13 +2994,10 @@ function Library:CreateWindow(...)
         Size = UDim2.new(1, 0, 0, 25);
         Text = Config.Title or '';
         TextXAlignment = Enum.TextXAlignment.Center;
-        TextSize = 16;
-        Font = Enum.Font.GothamBlack;
-        TextColor3 = Library.AccentColor;
-        TextStrokeTransparency = 0;
         ZIndex = 1;
-        Parent = Inner,
+        Parent = Inner;
         RichText = true;
+        --BackgroundTransparency = 0;
     });
 
     local MainSectionOuter = Library:Create('Frame', {
@@ -3044,13 +3006,8 @@ function Library:CreateWindow(...)
         Position = UDim2.new(0, 8, 0, 25);
         Size = UDim2.new(1, -16, 1, -33);
         ZIndex = 1;
-        Parent = Inner,
+        Parent = Inner;
     });
-
-    -- Скругление основной секции
-    local MainCorner = Instance.new("UICorner")
-    MainCorner.CornerRadius = UDim.new(0, 6)
-    MainCorner.Parent = MainSectionOuter
 
     Library:AddToRegistry(MainSectionOuter, {
         BackgroundColor3 = 'BackgroundColor';
@@ -3064,7 +3021,7 @@ function Library:CreateWindow(...)
         Position = UDim2.new(0, 0, 0, 0);
         Size = UDim2.new(1, 0, 1, 0);
         ZIndex = 1;
-        Parent = MainSectionOuter,
+        Parent = MainSectionOuter;
     });
 
     Library:AddToRegistry(MainSectionInner, {
@@ -3076,7 +3033,7 @@ function Library:CreateWindow(...)
         Position = UDim2.new(0, 8, 0, 8);
         Size = UDim2.new(1, -16, 0, 21);
         ZIndex = 1;
-        Parent = MainSectionInner,
+        Parent = MainSectionInner;
     });
 
     local TabListLayout = Library:Create('UIListLayout', {
@@ -3084,7 +3041,7 @@ function Library:CreateWindow(...)
         FillDirection = Enum.FillDirection.Horizontal;
         HorizontalAlignment = Enum.HorizontalAlignment.Center;
         SortOrder = Enum.SortOrder.LayoutOrder;
-        Parent = TabArea,
+        Parent = TabArea;
     });
 
     local TabContainer = Library:Create('ImageLabel', {
@@ -3094,13 +3051,9 @@ function Library:CreateWindow(...)
         Position = UDim2.new(0, 8, 0, 30);
         Size = UDim2.new(1, -16, 1, -38);
         ZIndex = 2;
-        Parent = MainSectionInner,
+        Parent = MainSectionInner;
     });
-
-    -- Скругление контейнера вкладок
-    local TabContCorner = Instance.new("UICorner")
-    TabContCorner.CornerRadius = UDim.new(0, 6)
-    TabContCorner.Parent = TabContainer
+    
 
     Library:AddToRegistry(TabContainer, {
         BackgroundColor3 = 'MainColor';

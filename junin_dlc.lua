@@ -32,9 +32,9 @@ if not LPH_OBFUSCATED then
     SWG_DiscordID = 1337
     SWG_Private = true
     SWG_Dev = false
-    SWG_Version = "free"
-    SWG_Title = 'Premium JuNiN %s - %s | TG @junindlc'
-    SWG_ShortName = 'free'
+    SWG_Version = "premium"
+    SWG_Title = 'JuNiN %s - %s | TG @junindlc'
+    SWG_ShortName = 'premium'
     SWG_FullName = 'ts'
     SWG_FFA = false
 end;
@@ -254,6 +254,61 @@ ui.box = {
     misc = ui.tabs.misc:AddRightTabbox(),
     themeconfig = ui.tabs.config:AddLeftGroupbox('theme config'),
 }
+
+-- Логика поиска ближайшей цели
+local function GetClosestPlayer()
+    local ClosestPlayer = nil
+    local MaxDistance = Options.SilentAimFOV and Options.SilentAimFOV.Value or 100
+
+    for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v ~= game:GetService("Players").LocalPlayer and v.Character and v.Character:FindFirstChild("Head") then
+            local Pos, OnScreen = game:GetService("Workspace").CurrentCamera:WorldToViewportPoint(v.Character.Head.Position)
+            if OnScreen then
+                local Distance = (Vector2.new(Pos.X, Pos.Y) - game:GetService("UserInputService"):GetMouseLocation()).Magnitude
+                if Distance < MaxDistance then
+                    MaxDistance = Distance
+                    ClosestPlayer = v
+                end
+            end
+        end
+    end
+    return ClosestPlayer
+end
+
+-- Перехват выстрела
+local OldNameCall
+OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    local Method = getnamecallmethod()
+    local Args = {...}
+
+    if Toggles.SilentAimEnabled and Toggles.SilentAimEnabled.Value and (Method == "FindPartOnRayWithIgnoreList" or Method == "Raycast") then
+        local Target = GetClosestPlayer()
+        if Target and Target.Character and Target.Character:FindFirstChild("Head") then
+            if Method == "FindPartOnRayWithIgnoreList" then
+                local Origin = Args[1].Origin
+                local Direction = (Target.Character.Head.Position - Origin).Unit * 1000
+                Args[1] = Ray.new(Origin, Direction)
+                return OldNameCall(self, unpack(Args))
+            end
+        end
+    end
+    return OldNameCall(self, ...)
+end))
+
+local SilentAimGroup = ui.box.combat:AddGroupBox('Silent Aim Premium')
+
+SilentAimGroup:AddToggle('SilentAimEnabled', {
+    Text = 'Включить Silent Aim',
+    Default = false,
+})
+
+SilentAimGroup:AddSlider('SilentAimFOV', {
+    Text = 'Радиус (FOV)',
+    Default = 100,
+    Min = 0,
+    Max = 800,
+    Rounding = 0,
+})
 
 local trident = {
     loaded = false,
